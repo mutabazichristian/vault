@@ -3,3 +3,4 @@ mysql-connector-python==8.0.15
 xhtml2pdf==0.2.5
 python-dotenv==0.21.0
 Werkzeug==2.2.2
+reportlab==3.5.68
