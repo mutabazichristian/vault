@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Artwork{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3>Add New Artwork</h3>
+    <form id="artwork-form" method="post" enctype="multipart/form-data" class="form-container">
+        <input type="hidden" name="portfolio_id" value="{{ portfolio_id }}">
+
+        <label for="artwork_title">Title:</label>
+        <input type="text" id="artwork_title" name="artwork_title" required>
+
+        <label for="artwork_description">Description:</label>
+        <textarea id="artwork_description" name="artwork_description" rows="4"></textarea>
+
+        <label for="artwork_genre">Genre:</label>
+        <input type="text" id="artwork_genre" name="artwork_genre">
+
+        <label for="artwork_file">File (max 5MB, images and .txt files only):</label>
+        <input type="file" id="artwork_file" name="artwork_file" accept="image/*,.txt" required>
+
+        <!-- Hidden input for artwork filetype -->
+        <input type="hidden" id="artwork_filetype" name="artwork_filetype">
+
+        <button type="submit" class="btn btn-primary">Add Artwork</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('artwork-form').addEventListener('submit', function (event) {
+        var fileInput = document.getElementById('artwork_file');
+        var file = fileInput.files[0];
+
+        if (file) {
+            // Check file size
+            if (file.size > 5 * 1024 * 1024) { // 5 MB
+                alert('File size exceeds 5 MB.');
+                event.preventDefault();
+                return;
+            }
+
+            // Check file type
+            var allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'text/plain'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Only image files and .txt files are allowed.');
+                event.preventDefault();
+                return;
+            }
+
+            // Set the filetype input value
+            document.getElementById('artwork_filetype').value = file.type;
+        }
+    });
+</script>
+{% endblock %}

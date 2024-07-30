@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Portfolio{% endblock %}
+
+{% block content %}
+<div class="edit-portfolio">
+    <h2>Edit Portfolio</h2>
+
+    <!-- Portfolio Edit Form -->
+    <form method="post" class="portfolio-form">
+        <input type="hidden" name="update_portfolio">
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="{{ portfolio.title }}" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required>{{ portfolio.description }}</textarea>
+
+        <label for="artmedium">Art Medium:</label>
+        <select id="artmedium" name="artmedium" required>
+            <option value="Music" {% if portfolio.artmedium=='Music' %}selected{% endif %}>Music</option>
+            <option value="Visual Image" {% if portfolio.artmedium=='Visual Image' %}selected{% endif %}>Visual Image
+            </option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Update Portfolio</button>
+    </form>
+
+    <div class="portfolio-actions">
+        <a href="{{ url_for('artwork.create_artwork', portfolio_id=portfolio.portfolio_id) }}"
+            class="btn btn-secondary">Add New Artwork</a>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-light">Back to Dashboard</a>
+    </div>
+
+    <!-- Delete Portfolio Button -->
+    <form method="post" action="{{ url_for('portfolio.delete_portfolio', portfolio_id=portfolio.portfolio_id) }}"
+        class="delete-form">
+        <button type="submit" class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete this portfolio? All related artwork will be lost.');">Delete
+            Portfolio</button>
+    </form>
+
+    <!-- List Artworks -->
+    <section class="artwork-list">
+        <h3>Your Artworks</h3>
+        <ul>
+            {% for artwork in artworks %}
+            <li class="artwork-item">
+                <h4>{{ artwork.title }}</h4>
+                <p>{{ artwork.description }}</p>
+                <p>Genre: {{ artwork.genre }}</p>
+                {% if artwork.filetype.startswith('image/') %}
+                <!-- Display image files -->
+                <img src="{{ url_for('static', filename='uploads/' + artwork.file) }}" alt="{{ artwork.title }}"
+                    width="150">
+                {% elif artwork.filetype == 'text/plain' %}
+                <!-- Display text files -->
+                <p>Text File: <a href="{{ url_for('static', filename='uploads/' + artwork.file) }}" target="_blank">View
+                        File</a></p>
+                {% else %}
+                <!-- Handle unknown file types -->
+                <p>File type not supported for display: {{ artwork.filetype }}</p>
+                {% endif %}
+                <!-- Delete Button -->
+                <form method="post" action="{{ url_for('artwork.delete_artwork', artwork_id=artwork.artwork_id) }}"
+                    class="delete-form">
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this artwork?');">Delete</button>
+                </form>
+                <form method="post" action="{{ url_for('artwork.edit_artwork', artwork_id=artwork.artwork_id) }}"
+                    class="edit-form">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </li>
+            {% else %}
+            <li>No artworks found for this portfolio.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

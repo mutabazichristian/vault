@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Search Portfolios - Vault of Ideas{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <h2>Search Portfolios</h2>
+    <form action="/search_portfolios" method="POST" class="search-form">
+        <input type="text" name="query" value="{{ query }}" placeholder="Search for portfolios..." required>
+        <button type="submit" class="btn btn-primary search-button">Search</button>
+    </form>
+    
+    {% if portfolios %}
+        <h3>Search Results:</h3>
+        <ul class="portfolio-list">
+            {% for portfolio in portfolios %}
+                <li class="portfolio-item">
+                    <h4><a href="{{ url_for('portfolio.view_portfolio', portfolio_id=portfolio.portfolio_id) }}">{{ portfolio.title }}</a></h4>
+                    <p>By: {{ portfolio.user_name }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif query %}
+        <p>No portfolios found matching your search criteria.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ portfolio.title }} - Vault of Ideas{% endblock %}
+
+{% block content %}
+<div class="portfolio-container">
+    <header>
+        <h1>{{ portfolio.title }}</h1>
+    </header>
+
+    <section class="portfolio-details">
+        <h2>Details</h2>
+        <p><strong>Description:</strong> {{ portfolio.description }}</p>
+        <p><strong>Medium:</strong> {{ portfolio.artmedium }}</p>
+    </section>
+
+    {% if portfolio.artworks %}
+    <section class="portfolio-artworks">
+        <h3>Artworks</h3>
+        <div class="artworks-grid">
+            {% for artwork in portfolio.artworks %}
+            <div class="artwork-card">
+                <h4>{{ artwork.title }}</h4>
+                <img src="{{ url_for('static', filename=artwork.image_path) }}" alt="{{ artwork.title }}">
+                <p>{{ artwork.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% else %}
+    <p>No artworks found for this portfolio.</p>
+    {% endif %}
+
+    <div class="back-link">
+        <a href="{{ url_for('portfolio.search_portfolios') }}" class="btn btn-secondary">Back to Search</a>
+    </div>
+</div>
+{% endblock %}

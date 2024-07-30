@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Create Your Account</h2>
+    <form id="signupForm" class="auth-form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <div class="auth-links">
+        <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+    </div>
+    <div id="message" class="message"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('signupForm');
+        const messageDiv = document.getElementById('message');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                messageDiv.textContent = 'Passwords do not match.';
+                messageDiv.className = 'message error';
+                return;
+            }
+
+            const data = {
+                username: username,
+                email: email,
+                password: password,
+                confirm_password: confirmPassword
+            };
+
+            fetch("{{API_URL}}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.textContent = 'Registration successful!';
+                    messageDiv.className = 'message success';
+                    setTimeout(() => window.location.href = '/login', 1500);
+                } else {
+                    messageDiv.textContent = 'Registration failed: ' + data.message;
+                    messageDiv.className = 'message error';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                messageDiv.textContent = 'An error occurred while signing up: ' + error.message;
+                messageDiv.className = 'message error';
+            });
+        });
+    });
+</script>
+{% endblock %}

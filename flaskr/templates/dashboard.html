@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}VI Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Welcome, {{ session['username'] }}</h2>
+    <div class="dashboard-actions">
+        <a href="{{ url_for('portfolio.create_portfolio') }}" class="btn">Create New Portfolio</a>
+    </div>
+    <div class="portfolio-section">
+        <h3>Your Portfolios</h3>
+        {% if portfolios %}
+        <div class="portfolio-grid">
+            {% for portfolio in portfolios %}
+            <div class="portfolio-card">
+                <h4>{{ portfolio.title }}</h4>
+                <p class="portfolio-description">{{ portfolio.description|truncate(100) }}</p>
+                <p class="portfolio-medium">Medium: {{ portfolio.artmedium }}</p>
+                <a href="{{ url_for('portfolio.edit_portfolio', portfolio_id=portfolio.portfolio_id) }}"
+                    class="btn btn-small">Edit</a>
+                <a href="{{ url_for('pdf.download', portfolio_id=portfolio.portfolio_id) }}"
+                    class="btn btn-small">Download</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-portfolios">You have no portfolios yet. Create one to get started!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

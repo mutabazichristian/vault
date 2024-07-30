@@ -1,5 +1,7 @@
 .venv/
 
+flaskr/.env
+
 *.pyc
 __pycache__/
 

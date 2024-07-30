@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Create Portfolio - Vault of Ideas{% endblock %}
+
+{% block content %}
+<div class="create-portfolio-container">
+    <h2>Create New Portfolio</h2>
+
+    {% if error %}
+    <div class="message error">{{ error }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('portfolio.create_portfolio') }}" method="POST" class="create-portfolio-form">
+        <input type="hidden" name="user_id" value="{{ session.get('user_id') }}">
+
+        <div class="form-group">
+            <label for="title">Portfolio Title:</label>
+            <input type="text" id="title" name="title" maxlength="45" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="artmedium">Art Medium:</label>
+            <select id="artmedium" name="artmedium" required>
+                <option value="Poetry">Poetry</option>
+                <option value="Visual Arts">Visual Arts</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Portfolio</button>
+    </form>
+</div>
+{% endblock %}
