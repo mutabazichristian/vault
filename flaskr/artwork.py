@@ -37,8 +37,7 @@ def create_artwork(portfolio_id):
                 INSERT INTO artworks (title, description, genre, filetype, file, portfolio_id)
                 VALUES (%s, %s, %s, %s, %s, %s)
                 """
-                cursor.execute(insert_query, (title, description,
-                               genre, filetype, filename, portfolio_id))
+                cursor.execute(insert_query, (title, description,genre, filetype, filename, portfolio_id))
 
                 g.db.commit()
                 flash('Artwork added successfully!', 'success')
