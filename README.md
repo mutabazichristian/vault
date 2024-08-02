@@ -11,3 +11,6 @@ the hosting service goes in a dormant mode after awhile without activity! They d
 application that don't have a lot of daily users.
 
 After that minute is done, everything will work just fine. 
+
+Create an account, log in, then make a new portfolio. There you can add artworks and download 
+the pdf from the main dashboard page.
